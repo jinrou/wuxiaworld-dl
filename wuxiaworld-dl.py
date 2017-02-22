@@ -18,7 +18,7 @@ class Novel:
 
     Example:
     n = Novel('coiling-dragon', 'http://www.wuxiaworld.com/cdindex-html/')
-    n.download(16, 32)
+    n.download(16)
 
     """
 
