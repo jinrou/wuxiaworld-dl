@@ -9,6 +9,7 @@ Example: python wuxiaworld-dl.py --name=coiling-dragon \
 
 import click
 import lxml.html
+import requests
 
 
 class Novel:
@@ -26,14 +27,21 @@ class Novel:
         self.index_path = index_path
         self.outdir = outdir
 
-    def download(self, book, number_of_chapters):
+    def download(self, book):
         "download all chapters of book in one file"
         with open(self._book_path(book), 'w') as f:
-            for i in xrange(1, number_of_chapters + 1):
+            i = 1
+            while True:
                 url = self._chapter_url(book, i)
-                root = lxml.html.parse(url)
-                content = root.xpath('//div[@itemprop="articleBody"]')
-                f.write(content[0].text_content().encode("utf-8"))
+                r = requests.get(url)
+                print(url)
+                if r.status_code == 200:
+                    root = lxml.html.document_fromstring(r.content)
+                    content = root.xpath('//div[@itemprop="articleBody"]')
+                    f.write(content[0].text_content().encode("utf-8"))
+                elif r.status_code == 404:
+                    break
+                i += 1
 
     def _chapter_url(self, book, chapter):
         "return chapter url"
@@ -50,10 +58,9 @@ class Novel:
 @click.option('--indexpath', help='index path for novel; example: --indexpath="http://www.wuxiaworld.com/cdindex-html/"')
 @click.option('--outputdir', help='output dir; example: --outputdir=./out')
 @click.option('--book', help='book number; example: --book=16')
-@click.option('--numberofchapters', help='number of chapters in book; example: --numberofchapters=32')
-def main(name, indexpath, outputdir, book, numberofchapters):
+def main(name, indexpath, outputdir, book):
     n = Novel(name, indexpath, outputdir)
-    n.download(int(book), int(numberofchapters))
+    n.download(int(book))
 
 if __name__ == '__main__':
     main()
