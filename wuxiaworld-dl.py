@@ -4,7 +4,7 @@
 """ 
 Example: python wuxiaworld-dl.py --name=coiling-dragon \
 --indexpath="http://www.wuxiaworld.com/cdindex-html/"\
- --outputdir=./out --book=16 --numberofchapters=32
+ --outputdir=./out --book=16
 """
 
 import click
@@ -34,8 +34,8 @@ class Novel:
             while True:
                 url = self._chapter_url(book, i)
                 r = requests.get(url)
-                print(url)
                 if r.status_code == 200:
+                    print("chapter {} book {} has been downloaded".format(i, book))
                     root = lxml.html.document_fromstring(r.content)
                     content = root.xpath('//div[@itemprop="articleBody"]')
                     f.write(content[0].text_content().encode("utf-8"))
