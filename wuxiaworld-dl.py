@@ -6,7 +6,7 @@ Example: python wuxiaworld-dl.py --name=coiling-dragon \
 --indexpath="http://www.wuxiaworld.com/cdindex-html/"\
  --outputdir=./out --book=16
 """
-
+from __future__ import print_function
 import click
 import lxml.html
 import requests
