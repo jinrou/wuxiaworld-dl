@@ -1,10 +1,9 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
-
-""" 
+"""
 Example: python wuxiaworld-dl.py --name=coiling-dragon \
 --indexpath="http://www.wuxiaworld.com/cdindex-html/"\
- --outputdir=./out --book=16
+--outputdir=./out --book=16
 """
 from __future__ import print_function
 import click
@@ -55,12 +54,14 @@ class Novel:
 
 @click.command()
 @click.option('--name', help='novel name; example: --name=coiling-dragon')
-@click.option('--indexpath', help='index path for novel; example: --indexpath="http://www.wuxiaworld.com/cdindex-html/"')
+@click.option('--indexpath',
+              help='index path for novel; example: --indexpath="http://www.wuxiaworld.com/cdindex-html/"')
 @click.option('--outputdir', help='output dir; example: --outputdir=./out')
 @click.option('--book', help='book number; example: --book=16')
 def main(name, indexpath, outputdir, book):
     n = Novel(name, indexpath, outputdir)
     n.download(int(book))
+
 
 if __name__ == '__main__':
     main()
